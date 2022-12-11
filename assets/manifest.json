@@ -1,28 +1,28 @@
 {
   "Actions": [
     {
-      "Icon": "images/action1.icon",
-      "Name": "Your first action",
+      "Icon": "images/action1.icon.png",
+      "Name": "Display unread Mastodon notifications",
       "States": [
         {
-          "Image": "images/action1.key",
+          "Image": "images/action1.key.png",
           "TitleAlignment": "middle",
-          "FontSize": "15"
+          "FontSize": "10"
         }
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "",
-      "UUID": "reverse.dns.formatted.namespace.action"
+      "UUID": "net.edikabe.unread-mastodon-notifications.action"
     }
   ],
   "SDKVersion": 2,
-  "Author": "your name",
+  "Author": "Edikabe",
   "CodePath": "plugin.html",
   "PropertyInspectorPath": "propertyinspector.html",
-  "Name": "streamdeck template",
-  "Description": "a description",
+  "Name": "Mastodon unread notifications",
+  "Description": "Displays the number of unread notifications of your account",
   "Icon": "images/pluginIcon",
-  "Version": "0.0.0-development",
+  "Version": "0.0.1",
   "OS": [
     {
       "Platform": "mac",

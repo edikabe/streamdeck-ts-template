@@ -48,6 +48,10 @@ const config = (environment: unknown, options: { mode: string; env: unknown }): 
     module: {
       rules: [
         {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
           test: /\.(ts|js)$/,
           exclude: /node_modules/,
           use: {
