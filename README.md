@@ -14,6 +14,8 @@ npm run build
 ```
 npm run package
 ```
+## Publish
+TODO
 
 ## Create an app access token from your instance
 * Go to your instance application developpement settings and create a new application -> ex: https://mastodon.social/settings/applications/new
@@ -40,9 +42,11 @@ You will need to add a `DWORD html_remote_debugging_enabled` with value `1` in t
 * [ ] Stop listening on every letter typed in app config, add debouncing..
 * [ ] Create proper icon for the plugin instead of pink background..
 * [ ] Add debug mode on plugin properties
+* [ ] Publish plugin on Stream Deck store
 
 ## Resources
-*  https://developer.elgato.com/documentation/stream-deck/sdk/overview/
+* https://developer.elgato.com/documentation/stream-deck/sdk/overview/
+* https://docs.joinmastodon.org/methods/notifications/
 
 ## Kudos
 [Roman Weich](https://github.com/rweich) for his great module [rweich/streamdeck-ts](https://github.com/rweich/streamdeck-ts) which greatly helped me built this plugin 🫶🏻
