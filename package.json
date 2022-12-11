@@ -46,7 +46,6 @@
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.2",
     "fork-ts-checker-webpack-plugin": "^7.0.0",
-    "husky": "^7.0.4",
     "jsonfile": "^6.1.0",
     "lint-staged": "^12.3.3",
     "rimraf": "^3.0.2",
