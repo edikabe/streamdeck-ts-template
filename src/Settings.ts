@@ -9,7 +9,7 @@ export function isSettings(value: unknown): value is Settings {
         // validate appAccessToken prop
         && (value as Settings).hasOwnProperty('appAccessToken')
         && isString((value as Settings).appAccessToken)
-        && (value as Settings).appAccessToken.length > 3
+        // && (value as Settings).appAccessToken.length > 3
         // validate fetchEvery prop
         && (value as Settings).hasOwnProperty('fetchEvery')
         && isString((value as Settings).fetchEvery)

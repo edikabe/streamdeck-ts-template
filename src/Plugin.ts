@@ -2,6 +2,7 @@ import { Streamdeck } from '@rweich/streamdeck-ts';
 import { MastodonClient } from './MastodonClient';
 import PluginLoggerDelegate from './PluginLoggerDelegate';
 import { isSettings, Settings } from './Settings';
+import { BadgeStyle, generateKeyIcon } from './KeyIconGenerator';
 
 const plugin = new Streamdeck().plugin();
 let mastodonClient: MastodonClient | undefined;
@@ -29,8 +30,9 @@ plugin.on('willAppear', (event) => {
   }
 });
 
-function loadBackgroundWithInstanceIcon(instanceHost: string, context: string, numberOfUnreadNotifications?: number): void {
+async function loadBackgroundWithInstanceIcon(instanceHost: string, context: string, numberOfUnreadNotifications?: number) {
   plugin.logMessage(`Plugin:loadBackgroundWithInstanceIcon: from host -> ${instanceHost}, nbOfUnread: ${numberOfUnreadNotifications ? numberOfUnreadNotifications : 'n/a'}`);
+  /*
   const image = new Image();
   image.addEventListener('load', () => {
     const canvas = document.createElement('canvas');
@@ -58,7 +60,9 @@ function loadBackgroundWithInstanceIcon(instanceHost: string, context: string, n
       }
     }
   });
-  image.src = `https://${instanceHost}/favicon.ico`;
+  image.src = `https://${instanceHost}/favicon.ico`;*/
+  const canvas = await generateKeyIcon(instanceHost, BadgeStyle.red, numberOfUnreadNotifications);
+  plugin.setImage(canvas.toDataURL('image/png'), context);
 }
 
 plugin.on('didReceiveSettings', (event) => {
@@ -70,32 +74,37 @@ plugin.on('didReceiveSettings', (event) => {
     // store globally as it's need for opening browser with the configured host url...
     settings = event.settings;
 
+    // in any case, we try to set the instance icon..
     loadBackgroundWithInstanceIcon(settings.host, context!!);
 
-    // stoping previous polling...
-    if (mastodonClient) {
-      mastodonClient.stopPolling();
-    }
-
-    // create a new client
-    mastodonClient = new MastodonClient({
-      host: settings.host,
-      fetchEvery: parseInt(settings.fetchEvery),
-      accessToken: settings.appAccessToken
-    }, new PluginLoggerDelegate(plugin));
-
-    // then start polling for notifications..
-    mastodonClient.startPolling((success, err) => {
-      if (success) {
-        plugin.setTitle('', context!!);
-        loadBackgroundWithInstanceIcon(settings.host, context!!, success.numberOfUnreadNotifications);
-      } else {
-        plugin.setTitle(CHECK_YOUR_CONGIF_MSG, context!!);
-        plugin.logMessage(`Plugin:didReceiveSettings: Something went wrong: ${err?.message}`);
-        plugin.logMessage(err?.error);
+    // then we check for access token
+    if (settings.appAccessToken.length > 3) {
+      // stoping previous polling...
+      if (mastodonClient) {
+        mastodonClient.stopPolling();
       }
-    });
 
+      // create a new client
+      mastodonClient = new MastodonClient({
+        host: settings.host,
+        fetchEvery: parseInt(settings.fetchEvery),
+        accessToken: settings.appAccessToken
+      }, new PluginLoggerDelegate(plugin));
+
+      // then start polling for notifications..
+      mastodonClient.startPolling((success, err) => {
+        if (success) {
+          plugin.setTitle('', context!!);
+          loadBackgroundWithInstanceIcon(settings.host, context!!, success.numberOfUnreadNotifications);
+        } else {
+          plugin.setTitle(CHECK_YOUR_CONGIF_MSG, context!!);
+          plugin.logMessage(`Plugin:didReceiveSettings: Something went wrong: ${err?.message}`);
+          plugin.logMessage(err?.error);
+        }
+      });
+    } else {
+      plugin.setTitle('Check your\napp access\ntoken', context!!);
+    }
   } else {
     plugin.logMessage('Plugin:didReceiveSettings: Something is wrong with your config, maybe some fields are not filled up..');
     // draw default mastodon icon..

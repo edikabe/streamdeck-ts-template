@@ -1,7 +1,7 @@
 {
   "Actions": [
     {
-      "Icon": "images/action1.icon.png",
+      "Icon": "images/action-display-notifications.icon.png",
       "Name": "Display unread Mastodon notifications",
       "States": [
         {
@@ -20,7 +20,7 @@
   "CodePath": "plugin.html",
   "PropertyInspectorPath": "propertyinspector.html",
   "Name": "Mastodon unread notifications",
-  "Description": "Displays the number of unread notifications of your account",
+  "Description": "Displays the number of unread notifications of your Mastodon account",
   "Icon": "images/pluginIcon",
   "Version": "0.0.1",
   "OS": [

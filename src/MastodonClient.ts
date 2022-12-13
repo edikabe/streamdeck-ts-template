@@ -42,19 +42,18 @@ export class MastodonClient {
         }
     }
 
-    private async fetchLastReadNotification(): Promise<LastReadNotification> {
+    private async fetchLastReadNotification(): Promise<LastReadNotification | undefined> {
         const { data, status } = await axios.get<GetMarkersApiResponse>('/markers?timeline[]=notifications');
-        this.logMessage(`MastodonClient:fetchLastReadNotification`);
         this.logMessage(`MastodonClient:fetchLastReadNotification: status: ${JSON.stringify(status)}`);
         this.logMessage(`MastodonClient:fetchLastReadNotification: data: ${JSON.stringify(data)}`);
-        return data.notifications;
+        return data.notifications || undefined;
     }
 
-    private async fetchUnreadNotificationsCount(sinceLastReadId: number): Promise<number> {
-        const { data, status } = await axios.get<Array<any>>('/notifications', { params: { "since_id": sinceLastReadId } });
+    private async fetchUnreadNotificationsCount(sinceLastReadId?: number): Promise<number> {
+        const { data, status } = await axios.get<Array<any>>('/notifications', { params: (sinceLastReadId) ? { "since_id": sinceLastReadId } : {} });
         this.logMessage(`MastodonClient:fetchUnreadNotificationsCount: with since_id:${sinceLastReadId}`);
         this.logMessage(`MastodonClient:fetchUnreadNotificationsCount: status: ${JSON.stringify(status)}`);
-        this.logMessage(`MastodonClient:fetchUnreadNotificationsCount: data: ${JSON.stringify(data)}`);
+        // this.logMessage(`MastodonClient:fetchUnreadNotificationsCount: data: ${JSON.stringify(data)}`);
         return data.length;
     }
 
@@ -67,7 +66,7 @@ export class MastodonClient {
     private async fetchCount(cb: (success?: PollingResult, error?: PollingError) => void) {
         try {
             const lastReadNotification = await this.fetchLastReadNotification();
-            const numberOfUnread = await this.fetchUnreadNotificationsCount(lastReadNotification.last_read_id);
+            const numberOfUnread = await this.fetchUnreadNotificationsCount(lastReadNotification?.last_read_id);
             this.logMessage(`MastodonClient:fetchCount: nbOfUnread: ${numberOfUnread}`);
             cb({ numberOfUnreadNotifications: numberOfUnread });
         } catch (e) {

@@ -3,6 +3,7 @@ import { Streamdeck } from '@rweich/streamdeck-ts';
 
 import { isSettings, Settings } from './Settings';
 
+const DEFAULT_SETTINGS = { appAccessToken: '', fetchEvery: '30000', host: 'mastodon.social' };
 const pi = new Streamdeck().propertyinspector();
 let builder: FormBuilder<Settings> | undefined;
 
@@ -10,7 +11,7 @@ pi.on('websocketOpen', ({ uuid }) => pi.getSettings(uuid)); // trigger the didRe
 
 pi.on('didReceiveSettings', ({ settings }) => {
   if (builder === undefined) {
-    const initialData: Settings = isSettings(settings) ? settings : { appAccessToken: '', fetchEvery: '10000', host: 'mastodon.social' };
+    const initialData: Settings = isSettings(settings) ? settings : DEFAULT_SETTINGS;
     builder = new FormBuilder<Settings>(initialData);
 
     const host = builder.createInput().setLabel('Host').setPlaceholder('your instance host, ex: mastodon.social')
