@@ -12,7 +12,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "",
-      "UUID": "net.edikabe.unread-mastodon-notifications.action"
+      "UUID": "com.github.edikabe.display-unread-mastodon-notifications.action"
     }
   ],
   "SDKVersion": 2,
